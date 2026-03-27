@@ -1,11 +1,16 @@
+import os
+
 from openai import OpenAI
+
 from config import settings
 
 
 def get_client() -> OpenAI:
-    kwargs: dict = {"api_key": settings.OPENAI_API_KEY}
-    if settings.OPENAI_BASE_URL:
-        kwargs["base_url"] = settings.OPENAI_BASE_URL
+    api_key = os.environ.get("OPENAI_API_KEY") or settings.OPENAI_API_KEY
+    base_url = os.environ.get("OPENAI_BASE_URL") or settings.OPENAI_BASE_URL
+    kwargs: dict = {"api_key": api_key}
+    if base_url:
+        kwargs["base_url"] = base_url
     return OpenAI(**kwargs)
 
 
@@ -18,8 +23,9 @@ def chat(
     max_tokens: int | None = None,
 ) -> str:
     client = get_client()
+    model_name = os.environ.get("OPENAI_MODEL") or settings.OPENAI_MODEL
     response = client.chat.completions.create(
-        model=model or settings.OPENAI_MODEL,
+        model=model or model_name,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
