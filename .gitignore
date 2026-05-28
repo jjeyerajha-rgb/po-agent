@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+venv/
+*.log
+.streamlit/secrets.toml
+
+# Generated outputs (keep folder via .gitkeep)
+outputs/*
+!outputs/.gitkeep
+
